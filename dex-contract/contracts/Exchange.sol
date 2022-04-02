@@ -72,4 +72,37 @@ contract Exchange is ERC20 {
         }
         return liquidity;
     }
+
+    /**
+    @dev Returns amount of Eth/Antiparallel tokens to be returned to the user
+    * in the swap
+    */
+    function removeLiquidity(uint _amount) public returns (uint , uint) {
+        require(_amount > 0, "_amount should be greater than zero");
+        uint ethReserve = address(this).balance;
+        uint _totalSupply = totalSupply();
+        // The amount of Eth to be sent back to the user is based
+        // on a ratio
+        // Ratio is -> (Eth sent back to the user/ Current Eth reserve)
+        // = (amount of LP tokens that user wants to withdraw)/ Total supply of `LP` tokens)
+        // Then by some maths -> (Eth sent back to the user)
+        // = (Current Eth reserve * amount of LP tokens that user wants to withdraw)/Total supply of `LP` tokens
+        uint ethAmount = (ethReserve * _amount)/ _totalSupply;
+        // The amount of Antiparallel tokens that would be sent back to the user is based
+        // on a ratio
+        // Ratio is -> (Antiparallel token sent back to the user/ Current Antiparallel token reserve)
+        // = (amount of LP tokens that user wants to withdraw)/ Total supply of `LP` tokens)
+        // Then by some maths -> (Antiparallel tokens sent back to the user)
+        // = (Current Antiparallel token reserve * amount of LP tokens that user wants to withdraw)/Total supply of `LP` tokens
+        uint antiparallelTokenAmount = (getReserve() * _amount)/ _totalSupply;
+        // Burn the sent `LP` tokens from the user'a wallet because they are already sent to
+        // remove liquidity
+        _burn(msg.sender, _amount);
+        // Transfer `ethAmount` of Eth from user's wallet to the contract
+        payable(msg.sender).transfer(ethAmount);
+        // Transfer `antiparallelTokenAmount` of Antiparallel tokens from the user's wallet to the contract
+        ERC20(antiparallelTokenAddress).transfer(msg.sender, antiparallelTokenAmount);
+        return (ethAmount, antiparallelTokenAmount);
+    }
+
 }
