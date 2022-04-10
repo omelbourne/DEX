@@ -74,8 +74,7 @@ contract Exchange is ERC20 {
     }
 
     /**
-    @dev Returns amount of Eth/Antiparallel tokens to be returned to the user
-    * in the swap
+    * @dev Removes liquidity from the exchange
     */
     function removeLiquidity(uint _amount) public returns (uint , uint) {
         require(_amount > 0, "_amount should be greater than zero");
@@ -105,4 +104,71 @@ contract Exchange is ERC20 {
         return (ethAmount, antiparallelTokenAmount);
     }
 
+    /**
+    @dev Returns the amount of Eth/Antiparallel tokens to be returned to the user
+    * in the swap
+    */
+    function getAmountOfTokens(
+        uint256 inputAmount,
+        uint256 inputReserve,
+        uint256 outputReserve
+    ) public pure returns (uint256) {
+        require(inputReserve > 0 && outputReserve > 0, "invalid reserves");
+        // Charging fee of 1%
+        // Input amount with fees = (input amount - (1*(input amount)/100)) = ((input amount)*99)/100
+        uint256 inputAmountWithFee = inputAmount * 99;
+        // Need to follow the concept of `XY = K` curve
+        // Need to make sure (x + Δx)*(y - Δy) = (x)*(y)
+        // so the final formula is Δy = (y*Δx)/(x + Δx);
+        // Δy in this case is `tokens to be recieved`
+        // Δx = ((input amount)*99)/100, x = inputReserve, y = outputReserve
+        uint256 numerator = inputAmountWithFee * outputReserve;
+        uint256 denominator = (inputReserve * 100) + inputAmountWithFee;
+        return numerator / denominator;
+    }
+
+        /**
+     @dev Swaps Ether for Antiparallel Tokens
+    */
+    function ethToAntiparallelToken(uint _minTokens) public payable {
+    uint256 tokenReserve = getReserve();
+    // call the `getAmountOfTokens` to get the amount of Antiparallel tokens
+    // to be returned to the user after the swap
+    // The `inputReserve` we are sending is equal to
+    //  `address(this).balance - msg.value` instead of just `address(this).balance`
+    // because `address(this).balance` already contains the `msg.value` user has sent in the given call
+    // so we need to subtract it to get the actual input reserve
+    uint256 tokensBought = getAmountOfTokens(
+        msg.value,
+        address(this).balance - msg.value,
+        tokenReserve
+    );
+
+    require(tokensBought >= _minTokens, "insufficient output amount");
+    // Transfer the Antiparallel tokens to the user
+    ERC20(antiparallelTokenAddress).transfer(msg.sender, tokensBought);
+    }
+
+    /**
+    @dev Swaps Antiparallel Tokens for Ether
+    */
+    function antiparallelTokenToEth(uint _tokensSold, uint _minEth) public {
+    uint256 tokenReserve = getReserve();
+        // call the `getAmountOfTokens` to get the amount of ether
+        // to be returned to the user after the swap
+        uint256 ethBought = getAmountOfTokens(
+            _tokensSold,
+            tokenReserve,
+            address(this).balance
+        );
+        require(ethBought >= _minEth, "insufficient output amount");
+        // Transfer Antiparallel tokens from the user's address to the contract
+        ERC20(antiparallelTokenAddress).transferFrom(
+            msg.sender,
+            address(this),
+            _tokensSold
+        );
+        // send the `ethBought` to the user from the contract
+        payable(msg.sender).transfer(ethBought);
+    }
 }
