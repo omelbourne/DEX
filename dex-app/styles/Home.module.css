@@ -1,0 +1,104 @@
+.main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-family: Readex Pro, sans-serif;
+}
+
+.topContainer {
+  background-color: #F5F5F5;
+  border-radius: 20px;
+  padding: 30px;
+  margin: 20px;
+  font-size: 14px;
+}
+
+.footer {
+  display: flex;
+  padding: 2rem 0;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.image {
+  width: 75%;
+}
+
+.input {
+  width: 200px;
+  height: 100%;
+  padding: 10px;
+  margin: 10px 0px 5px 0px;
+  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+  font-family: Readex Pro, sans-serif;
+  font-size: 14px;
+}
+
+.title {
+  font-size: 2rem;
+  margin: 10px 0 0 0;
+}
+
+.description {
+  line-height: 1;
+  padding-top: 20px;
+  font-size: 1.2rem;
+}
+
+.button {
+  border-radius: 4px;
+  background-color:#ed4880;
+  border: none;
+  color: #ffffff;
+  font-size: 15px;
+  width: 100px;
+  height: 35px;
+  cursor: pointer;
+  margin: 25px 10px 0px 10px;
+  font-family: Readex Pro, sans-serif;
+}
+
+.inputDiv {
+  width: 200px;
+  height: 100%;
+  padding: 10px;
+  margin: 10px auto;
+  border: lightslategray;
+  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+}
+.select {
+  border-radius: 4px;
+  font-size: 14px;
+  padding: 5px;
+  width: 175px;
+  cursor: pointer;
+  margin: 10px;
+  font-family: Readex Pro, sans-serif;
+}
+
+.button1 {
+  border-radius: 20px;
+  background-color: #f38b17;
+  border: none;
+  color: #ffffff;
+  font-size: 15px;
+  width: 100px;
+  height: 35px;
+  cursor: pointer;
+  margin-top: 8px;
+  font-family: Readex Pro, sans-serif;
+}
+@media (max-width: 1000px) {
+  .main {
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}

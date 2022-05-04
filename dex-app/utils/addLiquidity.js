@@ -31,14 +31,14 @@ export const addLiquidity = async (
       EXCHANGE_CONTRACT_ABI,
       signer
     );
-    // Because tokens are an ERC20, user would need to give the contract allowance
+    // Because tokens are an ERC20, user would need to give the contract approval
     // to take the required number of tokens out of contract
     let tx = await tokenContract.approve(
       EXCHANGE_CONTRACT_ADDRESS,
       addAntiparallelAmountWei.toString()
     );
     await tx.wait();
-    // After the contract has the approval, add the ether and tokens in the liquidity
+    // After the contract has the approval, add the ether and tokens liquidity
     tx = await exchangeContract.addLiquidity(addAntiparallelAmountWei, {
       value: addEtherAmountWei,
     });
@@ -61,12 +61,12 @@ export const calculateAntiparallel = async (
   // We do that using the `parseEther` function from `ethers.js`
   const _addEtherAmountWei = utils.parseEther(_addEther);
   // Ratio needs to be maintained when we add liquiidty.
-  // We need to let the user know who a specific amount of ether how many tokens
-  // he can add so that the price impact is not large
+  // We need to let the user know (who has a specific amount of ether) how many tokens
+  // they can add so that the price impact is not large
   // The ratio we follow is (Amount of tokens to be added)/(tokens balance) = (Ether that would be added)/ (Eth reseve in the contract)
   // So by maths we get (Amount of tokens to be added) = (Ether that would be added * tokens balance)/ (Eth reseve in the contract)
   const antiparallelTokenAmount = _addEtherAmountWei
     .mul(antiparallelTokenReserve)
     .div(etherBalanceContract);
-  return antiparallelDevTokenAmount;
+  return antiparallelTokenAmount;
 };

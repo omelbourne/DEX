@@ -69,7 +69,7 @@ export const getLPTokensBalance = async (provider, address) => {
 
 /**
  * getReserveOfAntiparallelTokens: Retrieves the amount of tokens in the
- * exchange contarct address
+ * exchange contract address
  */
 export const getReserveOfAntiparallelTokens = async (provider) => {
   try {

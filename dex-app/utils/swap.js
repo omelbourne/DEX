@@ -8,7 +8,7 @@ import {
 
 /*
     getAmountOfTokensReceivedFromSwap:  Returns the number of Eth/Antiparallel tokens that can be recieved 
-    when the user swaps `_swapAmountWEI` amount of Eth/Antiparallel tokens.
+    when the user swaps `_swapAmountWei` amount of Eth/Antiparallel tokens.
 */
 export const getAmountOfTokensReceivedFromSwap = async (
   _swapAmountWei,
@@ -70,8 +70,8 @@ export const swapTokens = async (
   let tx;
   // If Eth is selected call the `ethToAntiparallelToken` function else
   // call the `antiparallelTokenToEth` function from the contract
-  // As you can see you need to pass the `swapAmount` as a value to the function because
-  // It is the ether we are paying to the contract, instead of a value we are passing to the function
+  // Need to pass the `swapAmount` as a value to the function because
+  // It is the ether being paid to the contract, instead of a value we are passing to the function
   if (ethSelected) {
     tx = await exchangeContract.ethToAntiparallelToken(
       tokenToBeRecievedAfterSwap,

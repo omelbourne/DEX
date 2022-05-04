@@ -21,7 +21,7 @@ export const removeLiquidity = async (signer, removeLPTokensWei) => {
 
 /**
  * getTokensAfterRemove: Calculates the amount of `Ether` and tokens
- * that would be returned back to user after he removes `removeLPTokenWei` amount
+ * that would be returned back to user after they remove `removeLPTokenWei` amount
  * of LP tokens from the contract
  */
 export const getTokensAfterRemove = async (
@@ -40,8 +40,8 @@ export const getTokensAfterRemove = async (
     // Get the total supply of LP tokens
     const _totalSupply = await exchangeContract.totalSupply();
     // Here we are using the Bignumber methods of multiplication and division
-    // The amount of ether that would be sent back to the user after he withdraws the LP token
-    // id calculated based on a ratio,
+    // The amount of ether that would be sent back to the user after they withdraw the LP token
+    // is calculated based on a ratio,
     // Ratio is -> (amount of ether that would be sent back to the user/ Eth reserves) = (LP tokens withdrawn)/(Total supply of LP tokens)
     // By some maths we get -> (amount of ether that would be sent back to the user) = (Eth Reserve * LP tokens withdrawn)/(Total supply of LP tokens)
     // Similariy we also maintain a ratio for the tokens, so here in our case
